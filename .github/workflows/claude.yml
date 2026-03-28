@@ -35,6 +35,11 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Project Setup
+        run: |
+          npm run setup
+          npm run dev:daemon
+
       - name: Write MCP config
         run: |
           cat > .mcp.json << 'EOF'
