@@ -40,19 +40,6 @@ jobs:
           npm run setup
           npm run dev:daemon
 
-      - name: Write MCP config
-        run: |
-          cat > .mcp.json << 'EOF'
-          {
-            "mcpServers": {
-              "playwright": {
-                "command": "npx",
-                "args": ["@playwright/mcp@latest", "--headless"]
-              }
-            }
-          }
-          EOF
-
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@v1
@@ -64,7 +51,15 @@ jobs:
 
           allowed_tools: "Bash(npm run:*),Bash(sqlite3:*),Bash(cat:*),mcp__playwright__browser_navigate,mcp__playwright__browser_snapshot,mcp__playwright__browser_click,mcp__playwright__browser_type,mcp__playwright__browser_take_screenshot,mcp__playwright__browser_wait_for,mcp__playwright__browser_evaluate,mcp__playwright__browser_console_messages,mcp__playwright__browser_network_requests"
 
-          claude_args: '--mcp-config .mcp.json'
+          mcp_config: |
+            {
+              "mcpServers": {
+                "playwright": {
+                  "command": "npx",
+                  "args": ["@playwright/mcp@latest", "--headless"]
+                }
+              }
+            }
 
           custom_instructions: |
             The project is already set up with all dependencies installed.
